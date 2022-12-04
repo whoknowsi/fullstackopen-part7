@@ -12,7 +12,7 @@ import Togglable from './components/Togglable'
 import BlogEntries from './components/BlogEntries'
 import Users from './components/Users'
 import UserDetails from './components/UserDetails'
-import Header from './components/Header'
+import Nav from './components/Nav'
 import Blog from './components/Blog'
 
 const App = () => {
@@ -27,10 +27,11 @@ const App = () => {
 
 	return (
 		<div>
-			<Notification />
 			{user ? (
 				<>
-					<Header />
+					<Nav />
+					<Notification />
+					<h2>blogs</h2>
 					<Routes>
 						<Route path="/users" element={<Users />} />
 						<Route path="/users/:id" element={<UserDetails />} />
@@ -39,9 +40,14 @@ const App = () => {
 					</Routes>
 				</>
 			) : (
-				<Togglable buttonLabel="login">
-					<Login/>
-				</Togglable>
+				<>
+					<Notification />
+					<Togglable buttonLabel="login">
+						<Login/>
+					</Togglable>
+				</>
+
+
 			)}
 		</div>
 	)
