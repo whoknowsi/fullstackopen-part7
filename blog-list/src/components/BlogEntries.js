@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import ListGroup from 'react-bootstrap/ListGroup'
 
 import Togglable from './Togglable'
 import BlogForm from './BlogForm'
@@ -13,9 +14,9 @@ const BlogLink = ({ blog }) => {
 		marginBottom: 5
 	}
 	return (
-		<div style={style}>
-			<Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-		</div>
+		<ListGroup style={style}>
+			<ListGroup.Item><Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link></ListGroup.Item>
+		</ListGroup>
 	)
 }
 

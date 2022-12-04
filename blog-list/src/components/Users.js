@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { initializeUsers } from '../reducers/usersReducer'
 
+import Table from 'react-bootstrap/Table'
+
 const User = ({ user }) => {
 	return (
 		<tr>
@@ -25,7 +27,7 @@ const Users = () => {
 		<div>
 			<h2>Users</h2>
 
-			<table>
+			<Table>
 				<thead>
 					<tr>
 						<th></th>
@@ -35,7 +37,7 @@ const Users = () => {
 				<tbody>
 					{users.map(user => <User key={user.id} user={user} />)}
 				</tbody>
-			</table>
+			</Table>
 
 		</div>
 	)

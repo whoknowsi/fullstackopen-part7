@@ -6,6 +6,8 @@ import { initializeUsers } from './reducers/usersReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { Route, Routes } from 'react-router-dom'
 
+import Container from 'react-bootstrap/Container'
+
 import Login from './components/Login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -30,22 +32,25 @@ const App = () => {
 			{user ? (
 				<>
 					<Nav />
-					<Notification />
-					<h2>blogs</h2>
-					<Routes>
-						<Route path="/users" element={<Users />} />
-						<Route path="/users/:id" element={<UserDetails />} />
-						<Route path="/blogs/:id" element={<Blog />} />
-						<Route path="/" element={<BlogEntries />} />
-					</Routes>
+					<Container>
+						<Notification />
+						<h2>blogs</h2>
+						<Routes>
+							<Route path="/users" element={<Users />} />
+							<Route path="/users/:id" element={<UserDetails />} />
+							<Route path="/blogs/:id" element={<Blog />} />
+							<Route path="/" element={<BlogEntries />} />
+						</Routes>
+					</Container>
 				</>
 			) : (
-				<>
+				<Container>
 					<Notification />
 					<Togglable buttonLabel="login">
 						<Login/>
 					</Togglable>
-				</>
+				</Container>
+
 
 
 			)}
