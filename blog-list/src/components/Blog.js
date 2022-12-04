@@ -1,18 +1,20 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ username, blog, removeBlogEntry, updateBlogLikes }) => {
+const Blog = ({ username, blog }) => {
 	const [view, setView] = useState(false)
+	const dispatch = useDispatch()
 
 	const handleLike = async (e) => {
-		e.target.disabled = true
-		await updateBlogLikes(blog)
-		e.target.disabled = false
+		const likeButton = e.target
+		dispatch(likeBlog(blog, likeButton))
 	}
 
 	const handleDelete = (e) => {
 		if (window.confirm(`Do you really want to delete ${blog.title}?`)) {
 			e.target.disabled = true
-			removeBlogEntry(blog)
+			dispatch(deleteBlog(blog.id))
 		}
 	}
 

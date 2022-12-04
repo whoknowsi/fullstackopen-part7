@@ -15,8 +15,8 @@ const createBlogEntry = async (data) => {
 	return res.data
 }
 
-const likeBlog = async (id, data) => {
-	const res = await axios.put(baseUrl + '/' + id, data)
+const likeBlog = async (data) => {
+	const res = await axios.put(baseUrl + '/' + data.id, data)
 	return res.data
 }
 

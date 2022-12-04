@@ -12,11 +12,20 @@ const blogsSlice = createSlice({
 		},
 		addBlog(state, action) {
 			return [...state, action.payload]
+		},
+		removeBlog(state, action) {
+			return state.filter((blog) => blog.id !== action.payload)
+		},
+		updateBlog(state, action) {
+			const updatedBlog = action.payload
+			return state.map((blog) =>
+				blog.id === updatedBlog.id ? updatedBlog : blog
+			)
 		}
 	}
 })
 
-const { setBlogs, addBlog } = blogsSlice.actions
+const { setBlogs, addBlog, removeBlog, updateBlog } = blogsSlice.actions
 
 export const initializeBlogs = () => {
 	return async (dispatch) => {
@@ -43,6 +52,40 @@ export const createBlog = (blog) => {
 			dispatch(createNotification(message, 'error', 5))
 		}
 
+	}
+}
+
+export const deleteBlog = (id) => {
+	return async (dispatch) => {
+		try {
+			await blogsService.deleteBlog(id)
+			dispatch(removeBlog(id))
+
+			const message = 'Blog removed'
+			dispatch(createNotification(message, 'success', 5))
+		} catch (error) {
+			const message = error.response.data.error
+			dispatch(createNotification(message, 'error', 5))
+		}
+	}
+}
+
+export const likeBlog = (blog, likeButton) => {
+	likeButton.disabled = true
+	return async (dispatch) => {
+		try {
+			const updatedBlog = { ...blog, likes: blog.likes + 1 }
+			await blogsService.likeBlog(updatedBlog)
+			dispatch(updateBlog(updatedBlog))
+
+			const message = `Blog ${updatedBlog.title} by ${updatedBlog.author} liked`
+			dispatch(createNotification(message, 'success', 5))
+		} catch (error) {
+			const message = error.response.data.error
+			dispatch(createNotification(message, 'error', 5))
+		} finally {
+			likeButton.disabled = false
+		}
 	}
 }
 
