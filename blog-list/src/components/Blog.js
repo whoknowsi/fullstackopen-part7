@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useMatch } from 'react-router-dom'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
+const Comment = ({ comment }) => <li>{comment}</li>
+
 const Blog = () => {
 	const dispatch = useDispatch()
 	const username = useSelector(state => state.user.username)
@@ -20,17 +22,25 @@ const Blog = () => {
 			dispatch(deleteBlog(blog.id))
 		}
 	}
-	return (
-		<>
-			<h2>{blog.title} {blog.author}</h2>
-			<a href={blog.url}>{blog.url}</a>
-			<div>
-				{blog.likes} likes <button onClick={handleLike}>like</button>
-			</div>
-			<div>added by {blog.user.username}</div>
 
-			{username === blog.user.username && <button onClick={handleDelete}>remove</button>}
-		</>
+	return (
+		blog && (
+			<>
+				<h2>{blog.title} {blog.author}</h2>
+				<a href={blog.url}>{blog.url}</a>
+				<div>
+					{blog.likes} likes <button onClick={handleLike}>like</button>
+				</div>
+				<div>added by {blog.user.username}</div>
+
+				{username === blog.user.username && <button onClick={handleDelete}>remove</button>}
+
+				<h3>Comments</h3>
+				<ul>
+					{blog.comments.map(({ id, comment }) => <Comment key={id} comment={comment} />)}
+				</ul>
+
+			</>)
 	)
 
 }
