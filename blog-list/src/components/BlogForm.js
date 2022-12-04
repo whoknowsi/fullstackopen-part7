@@ -8,15 +8,17 @@ const BlogFrom = ({ newBlogEntryRef }) => {
 	const [url, setUrl] = useState('')
 	const dispatch = useDispatch()
 
-	const handleSubmitBlogEntry = (e) => {
-		e.preventDefault()
-		const blog = { title, author, url }
-		dispatch(createBlog(blog))
-		newBlogEntryRef.current.toggleVisibility()
-
+	const clearForm = () => {
 		setTitle('')
 		setAuthor('')
 		setUrl('')
+		newBlogEntryRef.current.toggleVisibility()
+	}
+
+	const handleSubmitBlogEntry = (e) => {
+		e.preventDefault()
+		const blog = { title, author, url }
+		dispatch(createBlog(blog, clearForm))
 	}
 
 	return (

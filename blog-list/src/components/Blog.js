@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ username, blog }) => {
+const Blog = ({ blog }) => {
 	const [view, setView] = useState(false)
 	const dispatch = useDispatch()
+	const username = useSelector(state => state.user.username)
 
 	const handleLike = async (e) => {
 		const likeButton = e.target

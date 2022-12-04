@@ -39,11 +39,12 @@ export const initializeBlogs = () => {
 	}
 }
 
-export const createBlog = (blog) => {
+export const createBlog = (blog, clearForm) => {
 	return async (dispatch) => {
 		try {
 			const newBlog = await blogsService.createBlogEntry(blog)
 			dispatch(addBlog(newBlog))
+			clearForm()
 
 			const message = `A new blog ${blog.title} by ${blog.author} added`
 			dispatch(createNotification(message, 'success', 5))
