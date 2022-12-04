@@ -90,4 +90,23 @@ export const likeBlog = (blog, likeButton) => {
 	}
 }
 
+export const addComment = (blog, userComment, commentForm) => {
+	return async (dispatch) => {
+		try {
+			const { comment, id } = await blogsService.commentBlog(blog.id, { comment: userComment })
+			const newComment = { comment, id }
+			const updatedBlog = { ...blog, comments: blog.comments.concat(newComment) }
+
+			dispatch(updateBlog(updatedBlog))
+
+			const message = `Comment added to blog ${updatedBlog.title} by ${updatedBlog.author}`
+			dispatch(createNotification(message, 'success', 5))
+			commentForm.reset()
+		} catch (error) {
+			const message = error.response.data.error
+			dispatch(createNotification(message, 'error', 5))
+		}
+	}
+}
+
 export default blogsSlice.reducer
