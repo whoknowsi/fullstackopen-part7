@@ -5,22 +5,19 @@ import BlogForm from './components/BlogForm'
 import blogsService from './services/blogs'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { createNotification } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
+
 
 const App = () => {
-	const [blogs, setBlogs] = useState([])
 	const [user, setUser] = useState()
 	const newBlogEntryRef = useRef()
 	const dispatch = useDispatch()
+	const blogs = useSelector(state => state.blogs)
 
 	useEffect(() => {
-		const getblogs = async () => {
-			const blogsFound = await blogsService.getAll()
-			setBlogs(blogsFound.sort(sortByLikes))
-		}
-		getblogs()
-	}, [])
+		dispatch(initializeBlogs())
+	}, [dispatch])
 
 	useEffect(() => {
 		const foundUserLocalStorage = window.localStorage.getItem('user')
@@ -31,9 +28,9 @@ const App = () => {
 		}
 	}, [])
 
-	const sortByLikes = (a, b) => {
-		return a.likes - b.likes
-	}
+	// const sortByLikes = (a, b) => {
+	// 	return a.likes - b.likes
+	// }
 
 	const handleLogout = () => {
 		window.localStorage.removeItem('user')
@@ -41,23 +38,14 @@ const App = () => {
 		setUser('')
 	}
 
-	const createBlogEntry = async (data) => {
-		try {
-			const newBlog = await blogsService.createBlogEntry(data)
-
-			const message = `A new blog ${newBlog.title} by ${newBlog.author} added`
-			dispatch(createNotification(message, 'success', 5))
-			setBlogs([...blogs, newBlog].sort(sortByLikes))
-			newBlogEntryRef.current.toggleVisibility()
-		} catch (error) {
-			const message = error.response.data.error
-			dispatch(createNotification(message, 'error', 5))
-		}
+	const createBlogEntry = async (blog) => {
+		dispatch(createBlog(blog))
+		newBlogEntryRef.current.toggleVisibility()
 	}
 
 	const removeBlogEntry = async (data) => {
 		await blogsService.deleteBlog(data.id)
-		setBlogs(blogs.filter((x) => x.id !== data.id))
+		//setBlogs(blogs.filter((x) => x.id !== data.id))
 	}
 
 	const updateBlogLikes = async (blog) => {
@@ -66,8 +54,8 @@ const App = () => {
 			likes: blog.likes + 1,
 		}
 		await blogsService.likeBlog(updatedLikeBlog.id, updatedLikeBlog)
-		const updatedBlogs = await blogsService.getAll()
-		setBlogs(updatedBlogs.sort(sortByLikes))
+		await blogsService.getAll()
+		//setBlogs(updatedBlogs.sort(sortByLikes))
 	}
 
 	const blogEntries = () => {
